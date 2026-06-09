@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Pedí tu Figurita!</title>
+    <!-- Se incluye la CDN oficial de Tailwind CSS para aplicar los estilos de forma inmediata -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 p-4 font-sans">
+
+    <div class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-xl space-y-6">
+        <h1 class="text-2xl font-black text-center text-blue-600 uppercase">¡Pedí tu Figurita!</h1>
+
+        <!-- Se añade onsubmit para validar los campos requeridos antes de disparar la función -->
+        <form id="pedidoForm" onsubmit="enviarWhatsApp(event)" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="nombre" placeholder="Nombre" required class="p-3 border rounded-lg bg-slate-50 w-full">
+                <input type="text" id="apellido" placeholder="Apellido" required class="p-3 border rounded-lg bg-slate-50 w-full">
+            </div>
+
+            <input type="date" id="fecha" required class="w-full p-3 border rounded-lg bg-slate-50">
+
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" id="altura" placeholder="Altura (ej: 1,15m)" required class="p-3 border rounded-lg bg-slate-50 w-full">
+                <input type="text" id="peso" placeholder="Peso (ej: 32 kg)" required class="p-3 border rounded-lg bg-slate-50 w-full">
+            </div>
+
+            <input type="text" id="pais" placeholder="País" required class="w-full p-3 border rounded-lg bg-slate-50">
+
+            <select id="opcion" class="w-full p-3 border rounded-lg bg-slate-50">
+                <option value="Figurita sola ($290)">Figurita sola ($290)</option>
+                <option value="Figurita con sobre ($350)">Figurita con sobre ($350)</option>
+            </select>
+
+            <!-- Cambiado a type="submit" para que el navegador valide que no haya campos vacíos -->
+            <button type="submit" class="w-full bg-emerald-500 text-white p-4 rounded-lg font-black hover:bg-emerald-600 transition-colors uppercase flex items-center justify-center gap-2">
+                Pedir por WhatsApp
+            </button>
+        </form>
+
+        <p class="text-[10px] text-center text-slate-400 italic">Al hacer clic, se abrirá WhatsApp con tu pedido listo para enviar.</p>
+    </div>
+
+    <script>
+        function enviarWhatsApp(event) {
+            // Evita que la página se recargue al procesar el formulario
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const fechaInput = document.getElementById('fecha').value;
+            const altura = document.getElementById('altura').value;
+            const peso = document.getElementById('peso').value;
+            const pais = document.getElementById('pais').value;
+            const opcion = document.getElementById('opcion').value;
+
+            // Formatear la fecha de AAAA-MM-DD a DD/MM/AAAA para mayor claridad
+            const partesFecha = fechaInput.split('-');
+            const fechaFormateada = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`;
+
+            const mensaje = `¡Hola! Quiero encargar una figurita personalizada:\n\n` +
+                            `*Nombre:* ${nombre} ${apellido}\n` +
+                            `*Fecha de Nacimiento:* ${fechaFormateada}\n` +
+                            `*Altura:* ${altura}\n` +
+                            `*Peso:* ${peso}\n` +
+                            `*País:* ${pais}\n` +
+                            `*Opción:* ${opcion}\n\n` +
+                            `Adjunto mi foto favorita.`;
+
+            // REEMPLAZA ESTE NÚMERO POR EL TUYO (Formato internacional: código de país + número, sin ceros ni el signo +)
+            const telefono = "59899003536"; 
+            
+            const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
